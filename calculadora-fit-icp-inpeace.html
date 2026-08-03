@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de fit ICP — InPeace</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css">
+<style>
+  :root {
+    --surface-page: #f7f6f3;
+    --surface-1: #f1efe8;
+    --surface-2: #ffffff;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --border: rgba(11,11,11,0.10);
+    --bg-success: #e6f6e6; --text-success: #0ca30c;
+    --bg-accent: #e6f1fb; --text-accent: #185fa5;
+    --bg-warning: #fff3dc; --text-warning: #a3690a;
+    --bg-danger: #fcebeb; --text-danger: #a32d2d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-page: #141413;
+      --surface-1: #1f1f1e;
+      --surface-2: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --border: rgba(255,255,255,0.10);
+      --bg-success: #0a2e0a; --text-success: #6fd66f;
+      --bg-accent: #0c2a42; --text-accent: #7fb8ec;
+      --bg-warning: #3a2a08; --text-warning: #f0b74a;
+      --bg-danger: #3a1414; --text-danger: #f09595;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 2rem 1rem;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .subtitle { font-size: 14px; color: var(--text-secondary); margin: 0 0 1.75rem; }
+  .card {
+    background: var(--surface-2);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  label { font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+  select {
+    width: 100%;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 0.5px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 12px; margin-bottom: 1.25rem; }
+  #score-card {
+    background: var(--surface-1);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  #score-card p { margin: 0; }
+  .score-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 2px !important; }
+  .score-val { font-size: 26px; font-weight: 500; }
+  #tier-badge { font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 8px; }
+  #reasons { font-size: 13px; color: var(--text-secondary); line-height: 1.9; margin-bottom: 2rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 8px; font-size: 12px; color: var(--text-secondary); }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .note { font-size: 12px; color: var(--text-muted); margin-top: 1.5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Calculadora de fit ICP — InPeace</h1>
+  <p class="subtitle">Heurístico construído a partir dos padrões encontrados nas bases de vendas e clientes — não é um modelo estatístico validado, é uma ferramenta de triagem.</p>
+
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label for="canal">Canal de origem</label>
+        <select id="canal">
+          <option value="35">Indicação</option>
+          <option value="30">WhatsApp / contato direto</option>
+          <option value="30">Anúncio pago (Ads)</option>
+          <option value="15">Formulário + outro toque</option>
+          <option value="8">Campanha específica (ex. Células)</option>
+          <option value="5">Formulário sozinho, sem outro toque</option>
+        </select>
+      </div>
+      <div>
+        <label for="porte">Porte da igreja</label>
+        <select id="porte">
+          <option value="15">1–100 membros</option>
+          <option value="24">101–250 membros</option>
+          <option value="25" selected>251–500 membros</option>
+          <option value="20">501–1.000 membros</option>
+          <option value="18">1.001–3.000 membros</option>
+          <option value="15">+3.000 membros</option>
+        </select>
+      </div>
+      <div>
+        <label for="timing">Timing de implementação</label>
+        <select id="timing">
+          <option value="15">Quer implementar imediatamente</option>
+          <option value="8">Médio prazo</option>
+          <option value="5">Ainda não sabe</option>
+        </select>
+      </div>
+      <div>
+        <label for="situacao">Situação atual</label>
+        <select id="situacao">
+          <option value="15">Usa outra plataforma (quer migrar)</option>
+          <option value="12">Nunca usou nenhum sistema</option>
+          <option value="6">Ainda não sabe dizer</option>
+        </select>
+      </div>
+      <div>
+        <label for="decisor">Quem está no contato</label>
+        <select id="decisor">
+          <option value="10">Pastor diretamente</option>
+          <option value="7">Secretaria / líder de comunicação</option>
+          <option value="3">Ainda não identificado</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="score-card">
+      <div>
+        <p class="score-label">Pontuação de fit</p>
+        <p class="score-val"><span id="score-val">0</span>/100</p>
+      </div>
+      <div id="tier-badge"></div>
+    </div>
+
+    <div id="reasons"></div>
+
+    <div class="legend">
+      <span><span class="swatch" style="background:#2a78d6;"></span>Ganho/avançado</span>
+      <span><span class="swatch" style="background:#eb6834;"></span>Perdido</span>
+      <span><span class="swatch" style="background:#1baf7a;"></span>Clientes cadastrados</span>
+    </div>
+    <div style="position:relative; width:100%; height:260px;">
+      <canvas id="sizeChart" role="img" aria-label="Gráfico de barras comparando a proporção de igrejas por faixa de porte entre negócios ganhos, perdidos e clientes cadastrados">1-100 membros: 26% ganho, 60% perdido, 50% clientes. 101-250: 25%, 21%, 19%. 251-500: 20%, 9%, 16%. 501-1000: 12%, 4%, 6%. 1001-3000: 11%, 2%, 6%. +3000: 5%, 4%, 3%.</canvas>
+    </div>
+
+    <p class="note">Pesos: canal (35 pts), porte (25 pts), timing (15 pts), situação atual (15 pts), decisor (10 pts). Baseado na análise de 148 negócios ganhos/avançados, 498 perdidos e 430 clientes cadastrados (jun/2025–jul/2026).</p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function calc(){
+  var canal = +document.getElementById('canal').value;
+  var porte = +document.getElementById('porte').value;
+  var timing = +document.getElementById('timing').value;
+  var situacao = +document.getElementById('situacao').value;
+  var decisor = +document.getElementById('decisor').value;
+  var total = canal+porte+timing+situacao+decisor;
+  document.getElementById('score-val').textContent = total;
+
+  var tier, bg, fg, msg;
+  if(total>=80){ tier='Fit ideal'; bg='var(--bg-success)'; fg='var(--text-success)'; msg='Priorize contato imediato — perfil bem alinhado ao que mais converte.'; }
+  else if(total>=60){ tier='Bom fit'; bg='var(--bg-accent)'; fg='var(--text-accent)'; msg='Vale investir esforço comercial normal, com acompanhamento em mais de um canal.'; }
+  else if(total>=40){ tier='Fit regular'; bg='var(--bg-warning)'; fg='var(--text-warning)'; msg='Nutrir antes de investir esforço pesado — qualifique melhor canal e timing.'; }
+  else { tier='Fit baixo'; bg='var(--bg-danger)'; fg='var(--text-danger)'; msg='Baixa prioridade — direcione esforço para leads com sinais mais fortes.'; }
+
+  var badge = document.getElementById('tier-badge');
+  badge.textContent = tier;
+  badge.style.background = bg;
+  badge.style.color = fg;
+
+  document.getElementById('reasons').innerHTML =
+    '<i class="ti ti-point-filled" style="font-size:8px; margin-right:6px; color:var(--text-muted);" aria-hidden="true"></i>Canal: '+canal+' pts &nbsp; '+
+    '<i class="ti ti-point-filled" style="font-size:8px; margin-right:6px; color:var(--text-muted);" aria-hidden="true"></i>Porte: '+porte+' pts &nbsp; '+
+    '<i class="ti ti-point-filled" style="font-size:8px; margin-right:6px; color:var(--text-muted);" aria-hidden="true"></i>Timing: '+timing+' pts<br>'+
+    '<i class="ti ti-point-filled" style="font-size:8px; margin-right:6px; color:var(--text-muted);" aria-hidden="true"></i>Situação atual: '+situacao+' pts &nbsp; '+
+    '<i class="ti ti-point-filled" style="font-size:8px; margin-right:6px; color:var(--text-muted);" aria-hidden="true"></i>Decisor: '+decisor+' pts<br>'+
+    '<span style="color:var(--text-primary);">'+msg+'</span>';
+}
+['canal','porte','timing','situacao','decisor'].forEach(function(id){
+  document.getElementById(id).addEventListener('change', calc);
+});
+calc();
+
+var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+new Chart(document.getElementById('sizeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['1–100','101–250','251–500','501–1.000','1.001–3.000','+3.000'],
+    datasets: [
+      { label: 'Ganho/avançado', data: [26,25,20,12,11,5], backgroundColor: '#2a78d6' },
+      { label: 'Perdido', data: [60,21,9,4,2,4], backgroundColor: '#eb6834' },
+      { label: 'Clientes cadastrados', data: [50,19,16,6,6,3], backgroundColor: '#1baf7a' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero:true, ticks:{ color: isDark?'#c3c2b7':'#52514e', callback:function(v){return v+'%';} }, grid:{ color: isDark?'#2c2c2a':'#e1e0d9' } },
+      x: { ticks:{ color: isDark?'#c3c2b7':'#52514e' }, grid:{ display:false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
